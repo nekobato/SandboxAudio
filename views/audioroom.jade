@@ -1,0 +1,17 @@
+extends layout
+
+block content
+
+  script(src='/socket.io/socket.io.js', type='text/javascript')
+
+  div()#sunaba
+    h2#room_name= room.name
+
+    div#player.player
+      audio(controls)#audio
+      ul#playlist
+        li(v-repeat='playlist') {{name}}
+      div(v-on='drop: drop($event), dragover: dragOver($event), dragleave: dragLeave($event)')#dropzone.dropzone
+
+    ul#userlist.userlist
+      li(v-repeat='userlist') {{id}}
