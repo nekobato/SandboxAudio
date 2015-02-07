@@ -10,7 +10,7 @@ window.SA = new Vue
     users: []
   methods:
     connect: (id) ->
-      conn = peer.connect(id)
+      conn = @peer.connect(id)
 
       conn.on 'open', () ->
 
@@ -19,13 +19,25 @@ window.SA = new Vue
 
         conn.send('Hello!')
 
+    getUserAll: () ->
+      @socket.emit 'get user all'
+
   created: () ->
 
-    @peer = new Peer
-      host: 'sa-peerjs.herokuapp.com',
-      port: 80
-      path: '/'
+    @socket = io('localhost:3000/')
 
-    @peer.on 'open', (id) =>
-      console.log('My peer ID is: ' + id)
-      @my.id = id
+    @socket.on 'connect', () =>
+      console.log 'Socket:', 'connected'
+
+      @socket.on 'users', (data) =>
+        console.log data
+
+      @peer = new Peer
+        host: 'sa-peerjs.herokuapp.com',
+        port: 80
+        path: '/'
+
+      @peer.on 'open', (id) =>
+        console.log('My peer ID is: ' + id)
+        @my.id = id
+        @socket.emit 'create user', { id: id }

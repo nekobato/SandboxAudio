@@ -6,34 +6,32 @@ io = require('socket.io')(server)
 
 io.on 'connection', (socket) ->
 
-  socket.room = {} if !socket.room
-  socket.peer = {} if !socket.peer
+  socket.user = { id: null } if !socket.user
 
-  socket.on 'enter', (data) ->
+  socket.on 'enter', () ->
 
-    console.log data
-
-    socket.peer.id = (Math.random().toString(36) + '0000000000000000000').substr(2, 16)
-    socket.emit 'entered', socket.peer
-
-    socket.room.name = data.room
-    socket.join socket.room.name
-    socket.to(socket.room.name).emit 'user entered', socket.peer
-    #redis.hmset socket.peer.id, "peerid", socket.peer.id
+    #socket.peer.id = (Math.random().toString(36) + '0000000000000000000').substr(2, 16)
 
 
-  socket.on 'join', (data) ->
-    socket.room.name = data.room
 
-    socket.join socket.room.name
-    socket.to(socket.room.name).emit 'joined', socket.peer
+  socket.on 'create user', (data) ->
 
-    #redis.hmset socket.peer.id, "peerid", socket.peer.id
+    socket.user = data
+
+    socket.broadcast.emit 'user joined: ', socket.peer
+
+    redis.hset "users", "user_#{data.id}", "#{data.id}"
+
+  socket.on 'get user all', (data) ->
+    redis.hgetall 'users', (err, res) ->
+      console.log "users: ", res
+      socket.emit 'users', res
+
 
   socket.on 'disconnect', () ->
-    socket.leave(socket.room.name) if socket.room.name
-    #redis.del socket.peer.id if socket.peer.id
 
-    socket.to(socket.room.name).emit 'user leaved', socket.peer.id if socket.peer.id
+    redis.hdel "users", "user_#{socket.user.id}" if socket.user
+
+    socket.broadcast.emit 'user leaved', socket.user.id if socket.user.id
 
 module.exports = io

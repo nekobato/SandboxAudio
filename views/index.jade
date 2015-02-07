@@ -12,3 +12,4 @@ block content
     ul#sa_userlist.sa-userlist
       li(v-repeat='userlist') {{name}}
     input(type='text' value='{{my.id}}')
+    button(v-on='click: getUserAll') get user all
