@@ -4,14 +4,6 @@ redis = require("redis").createClient()
 
 io = require('socket.io')(server)
 
-# user (hash)
-# user $socket.id {room:"", peerid:"", nick:""}
-# key  hashkey    stringifyed-json
-
-# room (list)
-# room:$room_name [id1, id2, id3, ...]
-# key             socket.id
-
 io.on 'connection', (socket) ->
 
   socket.room = {} if !socket.room

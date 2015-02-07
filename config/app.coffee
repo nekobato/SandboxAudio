@@ -14,6 +14,7 @@ pkg = require path.resolve 'package.json'
 # mongoose.connect "mongodb://localhost/#{pkg.name}"
 # redis = require('redis').createClient()
 
+
 # app set
 app.set "views", path.resolve 'views'
 app.set "view engine", "jade"

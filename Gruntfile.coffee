@@ -32,7 +32,7 @@ module.exports = (grunt) ->
     browserify:
       dist:
         src: ['src/javascripts/**/*.coffee']
-        dest: 'public/javascripts/app.js'
+        dest: 'public/javascripts/sunaba.js'
         options:
           transform: ['coffeeify']
           browserifyOptions: {
