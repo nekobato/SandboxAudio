@@ -9,21 +9,24 @@ header
   height: 60px
   background: #000
   text-align: center
+  h1, nav, form, ul, li
+    display: inline-block
   h1
-    display: inline-block
     margin: 0
-    width: 200px
     color: #fff
+    vertical-align: middle
   nav
-    display: inline-block
     width: 700px
-    form
-      display: inline-block
+    text-align: left
+    padding-left: 20px
     ul
-      display: inline-block
+      padding: 0
       list-style: none
     li
-      display: inline
+      margin-left: 20px
+      a
+        color: #fff
+        text-decoration: none
 
 .player
   margin: 20px auto
@@ -33,5 +36,16 @@ header
   .dropzone
     height: 80px
     border: 2px dotted #ddd
+    text-align: left
+    .progress
+      width: 0px
+      height: 100%
+      background: #ddd
+
   .dropzone:hover
     background: #AEf
+
+
+footer
+  .copy
+    margin: 20px

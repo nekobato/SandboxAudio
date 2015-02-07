@@ -1,13 +1,16 @@
 config = require('./config')
-Socket = require('./socket')
-#peer = require('./peer').create()
-
-socket = new Socket()
+socket = require('./socket')
+peer = require('./peer')
+console.log peer
+window.AudioContext = window.AudioContext || window.webkitAudioContext
 
 window.app = new Vue
   el: "#sunaba"
   data:
-    my: {}
+    my: {
+      name: 'myname'
+      id: 'myid'
+    }
     room: config.room
     playlist: [
       { name: 'title name' }
@@ -17,7 +20,6 @@ window.app = new Vue
   methods:
     drop: (event) ->
       event.preventDefault()
-      console.log 'dropped'
       files = event.dataTransfer.files
       console.log files
 
@@ -26,15 +28,25 @@ window.app = new Vue
         file: files[0]
 
       reader = new FileReader()
-      reader.onloadend = ->
-        console.log reader.result
-        #document.getElementById('audio').src = reader.result
-      reader.readAsDataURL( files[0] )
+      reader.onprogress = (event) ->
+        if event.lengthComputable && event.total > 0
+          rate = Math.floor((event.loaded / event.total) * 100)
+          document.getElementById('dropzone-progress').style.width = rate + '%'
+      reader.onload = ->
+        context = new AudioContext()
+        context.decodeAudioData reader.result, (audioBuffer) ->
+          source = context.createBufferSource()
+          source.buffer = audioBuffer
+          source.connect(context.destination)
+          source.start()
+
+      reader.readAsArrayBuffer( files[0] )
 
     dragOver: (event) ->
       event.preventDefault()
     dragLeave: (event) ->
       event.preventDefault()
+
 
   created: () ->
 

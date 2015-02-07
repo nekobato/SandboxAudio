@@ -1,24 +1,19 @@
 
 config = require('./config')
+socket = require('./socket')
 
-module.exports = class Peer
+peer = new webkitRTCPeerConnection {"iceServers": config.stn_servers}
 
-  peer = null
-  app = null
+peer.onicecandidate = (e) ->
+  return if !e.candidate
 
-  constructor: (_app) ->
+  socket.emit 'candidate',
+    "candidate": e.candidate
+    "type": 'candidate'
 
-    peer = new webkitRTCPeerConnection {"iceServers": config.stn_servers}
-    app = _app
-
-    peer.onicecandidate = (e) ->
-      return if !e.candidate
-
-      app.socket.emit 'candidate',
-        "candidate": e.candidate,
-        "type":      'candidate'
-
-    return @
+console.log socket
+console.log config
+module.exports =
 
   createOffer: (to_id) ->
     peer.createOffer (sdp) ->

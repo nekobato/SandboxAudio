@@ -1,42 +1,40 @@
 
 config = require('./config')
+peer = require('./peer')
 
-module.exports = class Socket
+socket = io()
 
-  socket = null
+socket.on 'webrtc sdp', (data) ->
+  #sdp = new RTCSessionDescription(data.sdp)
+  #peer.setRemoteDescription sdp, () ->
+    # final answer if sdp.type is "offer"
 
-  constructor: () ->
+socket.on 'candidate', (data) ->
+  #candidate = new RTCIceCandidate data.candidate
+  #peer.addIceCandidate(candidate)
 
-    socket = io()
+socket.on 'user status', (data) ->
+  console.log "user:", data
+  app.userlist.push {id: data}
 
-    socket.on 'sdp', (data) ->
-      peer.onCatchSdp JSON.parse(data)
+socket.on 'entered', (data) ->
+  console.log data
+  app.my.id = data.id
 
-    socket.on 'candidate', (data) ->
-      candidate = new RTCIceCandidate JSON.parse(data)
+socket.on 'user entered', (data) ->
+  console.log 'user entered', data
+  app.userlist.push data
+  peer.createOffer(data.id)
 
-    socket.on 'user status', (data) ->
-      console.log "user:", data
-      app.userlist.push {id: data}
+socket.on 'user leaved', (data) ->
+  console.log 'user leaved', data
+  app.userlist.forEach (v, i) ->
+    app.userlist.splice(i, 1) if v.id is data
 
-    socket.on 'entered', (data) ->
-      console.log data
-      app.my.id = data.id
+socket.on 'disconnect', (data) ->
+  #socket.emit 'disconnected', app.my_id
 
-    socket.on 'user entered', (data) ->
-      console.log 'user entered', data
-      app.userlist.push data
-
-    socket.on 'user leaved', (data) ->
-      console.log 'user leaved', data
-      app.userlist.forEach (v, i) ->
-        app.userlist.splice(i, 1) if v.id is data
-
-    socket.on 'disconnect', (data) ->
-      #socket.emit 'disconnected', app.my_id
-
-    return @
-
+module.exports =
 
   emit: (event, data) ->
     socket.json.emit event, data
