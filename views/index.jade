@@ -10,6 +10,6 @@ block content
   p Welcome to #{title}
   div#sa
     ul#sa_userlist.sa-userlist
-      li(v-repeat='userlist') {{name}}
+      li(v-repeat='users') {{id}}
     input(type='text' value='{{my.id}}')
     button(v-on='click: getUserAll') get user all

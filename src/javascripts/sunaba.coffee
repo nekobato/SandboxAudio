@@ -30,7 +30,7 @@ window.SA = new Vue
       console.log 'Socket:', 'connected'
 
       @socket.on 'users', (data) =>
-        console.log data
+        @users = Object.keys(data).map (v) -> { id: data[v] }
 
       @peer = new Peer
         host: 'sa-peerjs.herokuapp.com',
