@@ -12,7 +12,8 @@ io.on 'connection', (socket) ->
 
     #socket.peer.id = (Math.random().toString(36) + '0000000000000000000').substr(2, 16)
 
-
+    # LPUSH [room]_users [userid], LREM [room]_users -1 [userid] で管理した方がよさげ
+    # room propatiesは[room]で管理する
 
   socket.on 'create user', (data) ->
 

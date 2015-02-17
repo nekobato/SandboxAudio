@@ -8,19 +8,23 @@ window.SA = new Vue
     peer: null
     ws: null
     users: []
+    audioStream: null
+    target_peer_id: null
   methods:
-    connect: (id) ->
-      conn = @peer.connect(id)
+    connectPeer: (e) ->
+      console.log 'connect try'
 
-      conn.on 'open', () ->
+      @peer.connect(e.target.innerText)
+      @target_peer_id = e.target.innerText
 
-        conn.on 'data', (data) ->
-          console.log('Received', data)
-
-        conn.send('Hello!')
-
-    getUserAll: () ->
+    getUserAll: (e) ->
       @socket.emit 'get user all'
+
+    createStream: (e) ->
+      console.log e
+
+    # 方向性としては、callはmediaStreamしか遅れないのでx
+    # connectによりdataConnectionを得た後、dataConnection.send(data)によって送るのがよいかも
 
   created: () ->
 
@@ -33,6 +37,7 @@ window.SA = new Vue
         @users = Object.keys(data).map (v) -> { id: data[v] }
 
       @peer = new Peer
+        iceServers: [{ url: "stun:stun.l.google.com:19302" }]
         host: 'sa-peerjs.herokuapp.com',
         port: 80
         path: '/'
@@ -41,3 +46,17 @@ window.SA = new Vue
         console.log('My peer ID is: ' + id)
         @my.id = id
         @socket.emit 'create user', { id: id }
+
+      @peer.on 'call', (mediaConnection) ->
+        console.log mediaConnection.peer
+
+      @peer.on 'connection', (conn) ->
+        console.log 'peer connected'
+        conn.send 'Hello!'
+
+        conn.on 'data', (data)->
+          console.log data
+
+      @peer.on 'call', (call) ->
+        call.on 'stream', (stream) ->
+          @audioStream = URL.createObjectURL stream

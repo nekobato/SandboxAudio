@@ -10,6 +10,12 @@ block content
   p Welcome to #{title}
   div#sa
     ul#sa_userlist.sa-userlist
-      li(v-repeat='users') {{id}}
+      li(v-repeat='users')
+        button(v-on='click: connectPeer') {{id}}
     input(type='text' value='{{my.id}}')
     button(v-on='click: getUserAll') get user all
+    div
+      input(type='text' value='{{target_peer_id}}')
+      input#audio_file(type='file')
+      button(v-on='click: sendAudio') call
+    audio#radio(src='{{audioStream}}' autoplay)
