@@ -2,7 +2,7 @@ extends layout
 
 block content
   script(src='/javascripts/vue.min.js'  type='text/javascript')
-  script(src='/javascripts/peer.min.js' type='text/javascript')
+  script(src='/javascripts/peer.js' type='text/javascript')
   script(src='/javascripts/sunaba.js'   type='text/javascript' async defer)
   script(src='/socket.io/socket.io.js'  type='text/javascript')
     
@@ -16,6 +16,6 @@ block content
     button(v-on='click: getUserAll') get user all
     div
       input(type='text' value='{{target_peer_id}}')
-      input#audio_file(type='file')
+      input#audio_file(type='file' v-on='change: setAudio')
       button(v-on='click: sendAudio') call
     audio#radio(src='{{audioStream}}' autoplay)
