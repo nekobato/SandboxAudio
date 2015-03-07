@@ -2,7 +2,11 @@ config = require('./config')
 
 window.SA = new Vue
 
-  el: "#sa"
+  el: "#sandbox"
+
+  components:
+    userlist:
+      template: "#sa_userlist"
 
   data:
     my:
@@ -12,6 +16,7 @@ window.SA = new Vue
     users: []
     audioStream: null
     target_peer_id: null
+    audio: new Audio()
 
   methods:
     connectPeer: (e) ->
@@ -22,7 +27,6 @@ window.SA = new Vue
 
       dataConnection.on 'open', () =>
         console.log 'dataconnection opened'
-        #dataConnection.send('Hello! peer')
         console.log 'send: ', @audioStream
         dataConnection.send @audioStream
 
@@ -39,11 +43,19 @@ window.SA = new Vue
       @audioStream = URL.createObjectURL e.target.files[0]
       console.log @audioStream
 
-    # 方向性としては、callはmediaStreamしか送れないのでx
+    onAudioReceived: () ->
+      console.log 'audio event receieved'
+      @audio.src = @audioStream
+      @audio.play()
+
+
+    # peer.callはmediaStreamしか送れないのでx
     # connectによりdataConnectionを得た後、dataConnection.send(data)によって送るのがよいかも
 
 
   created: () ->
+
+    @$on 'audio received', @onAudioReceived
 
     @socket = io('localhost:3000/')
 
@@ -64,16 +76,17 @@ window.SA = new Vue
         @my.id = id
         @socket.emit 'create user', { id: id }
 
-      @peer.on 'connection', (dataConnection) ->
+      @peer.on 'connection', (dataConnection) =>
 
-        dataConnection.on 'open', () ->
+        dataConnection.on 'open', () =>
 
           console.log 'dataconnetion opened'
           dataConnection.send('Hello!')
 
-          dataConnection.on 'data', (data) ->
+          dataConnection.on 'data', (data) =>
             console.log 'Data received: ', data
-            SA.audioStream = data
+            @audioStream = data
+            @$emit 'audio received'
 
         dataConnection.on 'close', () ->
           console.log 'data connection closed'

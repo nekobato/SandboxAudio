@@ -1,8 +1,9 @@
 {
-  "name": "appname",
+  "name": "SandboxAudio",
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "prestart": "grunt build",
     "start": "bin/www",
     "test": "mocha --compilers coffee:coffee-script/register --colors --growl --bail --check-leaks test",
     "dev": "grunt & node-dev bin/www"
