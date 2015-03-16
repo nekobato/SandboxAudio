@@ -1,15 +1,11 @@
 extends layout
 
 block content
-  script(src='/javascripts/vue.min.js'  type='text/javascript')
-  script(src='/javascripts/peer.js' type='text/javascript')
-  script(src='/javascripts/sunaba.js'   type='text/javascript' async defer)
-  script(src='/socket.io/socket.io.js'  type='text/javascript')
-    
+      
   h1= title
   p Welcome to #{title}
   div#sandbox.sandbox
-    div.sa-userlist(v-component='userlist' v-with='users : users')
+    div.sa-userlist(v-component='userlist' v-with='users')
     
     input(type='text' value='{{my.id}}')
     button(v-on='click: getUserAll') get user all
@@ -24,3 +20,14 @@ block content
     ul#sa_userlist.sa-userlist
       li(v-repeat='users')
         button(v-on='click: connectPeer') {{id}}
+  
+  script#sa_playlist(type='x-template')
+    
+  script#sa_jukebox(type='x-template')
+    
+  script#sa_cheerform(type='x-template')
+
+  script(src='/javascripts/vue.min.js'  type='text/javascript')
+  script(src='/javascripts/peer.js' type='text/javascript')
+  script(src='/javascripts/sunaba.js'   type='text/javascript' async defer)
+  script(src='/socket.io/socket.io.js'  type='text/javascript')

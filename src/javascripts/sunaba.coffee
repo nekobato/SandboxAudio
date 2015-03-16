@@ -1,12 +1,16 @@
-config = require('./config')
+config  = require('./config')
+socket  = require('./socket')
+psocket = require('./psocket')
 
 window.SA = new Vue
 
   el: "#sandbox"
 
   components:
-    userlist:
-      template: "#sa_userlist"
+    userlist: require('./sa_userlist')
+    playlist: require('./sa_playlist')
+    jukebox:  require('./sa_jukebox')
+    chatform: require('./sa_cheerform')
 
   data:
     my:
@@ -56,37 +60,3 @@ window.SA = new Vue
   created: () ->
 
     @$on 'audio received', @onAudioReceived
-
-    @socket = io('localhost:3000/')
-
-    @socket.on 'connect', () =>
-      console.log 'Socket:', 'connected'
-
-      @socket.on 'users', (data) =>
-        @users = Object.keys(data).map (v) -> { id: data[v] }
-
-      @peer = new Peer
-        iceServers: [{ url: "stun:stun.l.google.com:19302" }]
-        host: 'sa-peerjs.herokuapp.com',
-        port: 80
-        path: '/'
-
-      @peer.on 'open', (id) =>
-        console.log('My peer ID is: ' + id)
-        @my.id = id
-        @socket.emit 'create user', { id: id }
-
-      @peer.on 'connection', (dataConnection) =>
-
-        dataConnection.on 'open', () =>
-
-          console.log 'dataconnetion opened'
-          dataConnection.send('Hello!')
-
-          dataConnection.on 'data', (data) =>
-            console.log 'Data received: ', data
-            @audioStream = data
-            @$emit 'audio received'
-
-        dataConnection.on 'close', () ->
-          console.log 'data connection closed'
