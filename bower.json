@@ -1,7 +1,0 @@
-{
-  "name": "sunabaaudio",
-  "private": true,
-  "dependencies": {
-    "vue": "~0.11.0"
-  }
-}
