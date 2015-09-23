@@ -1,19 +1,20 @@
 var WebpackNotifierPlugin = require('webpack-notifier');
 
 module.exports = {
-  entry: "./sunaba.js",
+  entry: {
+    sunaba: "./src/sunaba"
+  },
   output: {
-    filename: "./web/sunaba.js"
+    path: "./assets",
+    filename: "[name].js",
+    publicPath: "/assets/"
   },
   module: {
     loaders: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
-        loader: "babel",
-        query: {
-          cacheDirectory: true
-        }
+        exclude: /(node_modules|assets)/,
+        loader: "babel"
       },
       {
         test: /\.jade$/,
