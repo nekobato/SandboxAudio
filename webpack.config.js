@@ -39,5 +39,8 @@ module.exports = {
   plugins: [
     new WebpackNotifierPlugin({title: 'Webpack'}),
   ],
-  devtool: "#source-map"
+  devtool: "#source-map",
+  devServer: {
+    contentBase: "./web"
+  }
 }
