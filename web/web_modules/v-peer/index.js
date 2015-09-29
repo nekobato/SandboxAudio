@@ -1,4 +1,4 @@
-const Peer = require('peerjs');
+import Peer from 'peerjs';
 
 let peer = null;
 

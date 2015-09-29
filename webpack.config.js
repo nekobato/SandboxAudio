@@ -2,7 +2,7 @@ var WebpackNotifierPlugin = require('webpack-notifier');
 
 module.exports = {
   entry: {
-    sunaba: "./src/sunaba"
+    sunaba: "./web/sunaba"
   },
   output: {
     path: "./assets",

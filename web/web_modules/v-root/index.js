@@ -1,6 +1,6 @@
-let PeerCon = require('components/connect-peer');
+import PeerCon from 'v-peer';
 
-module.exports = {
+export default ({
   el: "#sunaba_audio",
   data: {
     test: true,
@@ -11,4 +11,4 @@ module.exports = {
   ready: function() {
     this.peercon = new PeerCon;
   }
-}
+});
