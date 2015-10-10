@@ -2,11 +2,17 @@ import Peer from 'peerjs';
 
 let peer = null;
 
-export default class ConnectPeer {
+export default function() {
+  let connectPeer = new ConnectPeer();
+
+}
+
+
+class ConnectPeer {
 
   constructor() {
 
-    peer = new Peer({
+    let peer = new Peer({
       iceServers: [{ url: "stun:stun.l.google.com:19302" }],
       host: 'nekobato-peer.herokuapp.com',
       port: 80,

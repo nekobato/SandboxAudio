@@ -2,10 +2,10 @@ var WebpackNotifierPlugin = require('webpack-notifier');
 
 module.exports = {
   entry: {
-    sunaba: "./web/sunaba"
+    sunaba: "./main"
   },
   output: {
-    path: "./assets",
+    path: "../assets",
     filename: "[name].js",
     publicPath: "/assets/"
   },
@@ -26,7 +26,7 @@ module.exports = {
       },
       {
         test: /.*\.(gif|png|jpe?g|svg)$/i,
-        loaders: 'file?name=./build/img/[hash].[ext]!img'
+        loaders: 'file?name=../assets/img/[hash].[ext]!img'
       }
     ]
   },
@@ -41,6 +41,6 @@ module.exports = {
   ],
   devtool: "#source-map",
   devServer: {
-    contentBase: "./web"
+    contentBase: "./server/views"
   }
 }
