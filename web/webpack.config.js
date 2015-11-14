@@ -41,6 +41,6 @@ module.exports = {
   ],
   devtool: "#source-map",
   devServer: {
-    contentBase: "./server/views"
+    contentBase: "../server/views"
   }
 }

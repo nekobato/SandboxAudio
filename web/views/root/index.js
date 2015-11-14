@@ -1,4 +1,4 @@
-import PeerCon from 'v-peer';
+// import PeerCon from 'peer';
 
 export default ({
   el: "#sunaba_audio",
@@ -7,7 +7,12 @@ export default ({
     test: true,
     test2: false,
   },
+  methods: {
+    onDragStart: function() {
+      console.log('dragstart');
+    }
+  },
   ready: function() {
-    this.peercon = new PeerCon;
+    // this.peercon = new PeerCon;
   }
 });
