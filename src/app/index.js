@@ -1,9 +1,13 @@
+// import styles from './style';
+
 module.exports = {
   el: 'body',
-  template: require('./template')
-  data: function() {
-    return {
-      styles: require('./style')
-    }
+  template: require('./template')(),
+  replace: false,
+  components: {
+    avators: require('components/avators')
+  },
+  data: {
+    // styles: styles
   }
 }

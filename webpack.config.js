@@ -3,6 +3,7 @@ var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
+  watch: true,
   entry: [
     "./src/main"
   ],
@@ -12,7 +13,8 @@ module.exports = {
     publicPath: "/"
   },
   resolve: {
-    extensions: ['', '.js', '.styl', '.jade']
+    extensions: ['', '.js', '.styl', '.jade'],
+    root: [path.resolve('./src/')]
   },
   module: {
     loaders: [
