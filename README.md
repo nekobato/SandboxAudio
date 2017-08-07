@@ -1,18 +1,18 @@
-SandboxAudio(仮)
-===
+# sunaba-audio
 
-webradio,
+> Sandbox Audio Dream of Radio?
 
-multi-channel &
+## Build Setup
 
-multi-user to multi-user
+``` bash
+# install dependencies
+npm install
 
+# serve with hot reload at localhost:8080
+npm run dev
 
-## Reference
+# build for production with minification
+npm run build
+```
 
-- Can I use (http://caniuse.com/#search=webrtc)
-- Redis Commands (http://redis.io/commands)
-- Vuejs API (http://vuejs.org/api)
-- Socket.io docs (http://socket.io/docs)
-- Peerjs docs (http://nttcom.github.io/skyway/docs)
- - Sample 1 (http://kray.jp/blog/peer-js/)
+For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
