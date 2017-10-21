@@ -1,39 +1,34 @@
 const WebSocket = require('ws')
+const fs = require('fs')
+const pcm = require('pcm')
+
+bufferSize = 8192
 
 module.exports = function (server) {
 
   const wss = new WebSocket.Server({ server })
 
-  const types = {
-    ENTER: 'ENTER',
-    GET_USERS: 'GET_USERS',
-    ADD_AUDIO: 'ADD_AUDIO',
-    AUDIO_STREAM: 'AUDIO_STREAM'
-  }
-
   users = []
   audios = []
+
+  var buffer = new Float32Array(bufferSize)
+  var bufferIndex = 0
 
   wss.on('connection', function connection(ws) {
 
     ws.on('message', onMessage)
 
-    ws.on(types.ENTER, function (peerId) {
-      users.push(peerId)
-      broadcast({ type: 'USERS', payload: users })
-    })
-
-    ws.on(types.GET_USERS, function (message) {
-      ws.send({ type: 'USERS', payload: users })
-    })
-
-    ws.on(types.ADD_AUDIO, function (audio) {
-      audios.push(JSON.parse(audio))
-      broadcast({ type: 'AUDIOS', payload: audios })
-    })
-
-    ws.on(types.AUDIO_STREAM, function (audio) {
-      console.log(audio)
+    pcm.getPcmData('test.mp3', { stereo: false, sampleRate: 44100 }, (sample, channel) => {
+      buffer[bufferIndex++] = sample
+      if (bufferIndex == buffer.length) {
+        ws.send(buffer)
+        buffer = new Float32Array(bufferSize)
+        bufferIndex = 0
+      }
+    }, (err, output) => {
+      if (err) {
+        ws.close()
+      }
     })
   })
 
